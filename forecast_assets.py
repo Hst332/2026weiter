@@ -1,7 +1,8 @@
 import yfinance as yf
 from model_core import model_score
 from forecast_utils import forecast_trend
-from decision_engine import trade_signal
+from decision_engine import decide
+
 
 ASSETS = [
     ("GOLD", "GC=F", "USD/oz"),
@@ -10,12 +11,14 @@ ASSETS = [
     ("COPPER", "HG=F", "USD/lb"),
 ]
 
+
 def forecast_asset(name, ticker, unit):
     df = yf.download(ticker, period="1y", interval="1d", progress=False)
 
     close = float(df["Close"].iloc[-1])
     score = model_score(df)
-    signal = trade_signal(name, score)
+
+    signal, _ = decide(name, score)
 
     return {
         "asset": name,
@@ -26,6 +29,7 @@ def forecast_asset(name, ticker, unit):
         "f_1_5": forecast_trend(df, 5),
         "f_2_3": forecast_trend(df, 21),
     }
+
 
 def run_all():
     return [forecast_asset(*a) for a in ASSETS]

@@ -1,42 +1,35 @@
-# decision_engine.py
-
-def decide(asset: str, score: float):
-    """
-    Zentrale Entscheidungslogik.
-    Gibt (signal, explanation) zurück.
-    """
-
-    # GOLD --------------------------------------------------
+def decide(asset, score):
     if asset == "GOLD":
         if score >= 0.55:
-            return "LONG_FULL", "score >= 0.55 → 100 % Long"
+            return "LONG_FULL", "Gold: score ≥ 0.55 → full long"
         elif score >= 0.53:
-            return "LONG_HALF", "0.53 ≤ score < 0.55 → 50 % Long"
+            return "LONG_HALF", "Gold: score 0.53–0.55 → half long"
         else:
-            return "NO_TRADE", "score < 0.53 → no trade"
+            return "NO_TRADE", "Gold: score < 0.53"
 
-    # SILVER ------------------------------------------------
     if asset == "SILVER":
         if score >= 0.96:
-            return "LONG", "score >= 0.96 → Long allowed"
+            return "LONG", "Silver: score ≥ 0.96"
         else:
-            return "NO_TRADE", "score < 0.96 → ignore"
+            return "NO_TRADE", "Silver below threshold"
 
-    # COPPER ------------------------------------------------
     if asset == "COPPER":
         if score >= 0.56:
-            return "LONG", "score >= 0.56 → Long allowed"
+            return "LONG", "Copper: score ≥ 0.56"
         else:
-            return "NO_TRADE", "score < 0.56 → no trade"
+            return "NO_TRADE", "Copper below threshold"
 
-    # NATURAL GAS ------------------------------------------
     if asset == "NATURAL GAS":
         if score >= 0.56:
-            return "LONG", "score >= 0.56 → Long"
+            return "LONG", "Gas: prob_up ≥ 0.56"
         elif score <= 0.44:
-            return "SHORT", "score ≤ 0.44 → Short"
+            return "SHORT", "Gas: prob_up ≤ 0.44"
         else:
-            return "NO_TRADE", "0.44 < score < 0.56 → no trade"
+            return "NO_TRADE", "Gas neutral zone"
 
-    # FALLBACK ---------------------------------------------
-    return "NO_TRADE", "unknown asset"
+    return "NO_TRADE", "Unknown asset"
+
+
+def log_decision(asset, score):
+    signal, reason = decide(asset, score)
+    print(f"[DECISION] {asset:12} | score={score:.3f} → {signal:10} | {reason}")

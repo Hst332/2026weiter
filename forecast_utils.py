@@ -1,5 +1,3 @@
-# forecast_utils.py
-
 def forecast_trend(df, days):
     last = float(df["Close"].iloc[-1])
     past = float(df["Close"].iloc[-days])

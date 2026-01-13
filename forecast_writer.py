@@ -35,6 +35,9 @@ def write_daily_summary(results):
             "- Holding period: 5–20 trading days\n"
             "- Leverage: max 3–5\n"
             "- No short positions\n\n"
+            "ChatGPT Prognose 1–5D": gpt_1_5d,
+            "ChatGPT Prognose 2–3W": gpt_2_3w,
+            "Final": final
 
             "SILVER\n"
             "- Direction: LONG only\n"
@@ -43,6 +46,9 @@ def write_daily_summary(results):
             "- Leverage: max 15\n"
             "- Stop-loss: hard -20 %\n"
             "- Ignore all signals below threshold\n\n"
+            "ChatGPT Prognose 1–5D": gpt_1_5d,
+            "ChatGPT Prognose 2–3W": gpt_2_3w,
+            "Final": final
 
             "COPPER\n"
             "- Direction: LONG only\n"
@@ -51,6 +57,9 @@ def write_daily_summary(results):
             "- Leverage: max 5–10\n"
             "- Stop-loss: hard -20 %\n"
             "- No shorts\n\n"
+            "ChatGPT Prognose 1–5D": gpt_1_5d,
+            "ChatGPT Prognose 2–3W": gpt_2_3w,
+            "Final": final
 
             "NATURAL GAS\n"
             "- Direction: LONG & SHORT\n"
@@ -59,6 +68,9 @@ def write_daily_summary(results):
             "- Otherwise: NO TRADE\n"
             "- Leverage: max 10\n"
             "- Stop-loss: hard -20 %\n\n"
+            "ChatGPT Prognose 1–5D": gpt_1_5d,
+            "ChatGPT Prognose 2–3W": gpt_2_3w,
+            "Final": final
 
             "NOT TRADED\n"
             "- Crude Oil (too impulsive / unstable regimes)\n"

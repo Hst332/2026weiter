@@ -29,16 +29,17 @@ def decide(asset, score):
         else:
             return "NO_TRADE"
 
-    return "NO_TRADE"
 
-       gpt_1_5d, gpt_2_3w, final = chatgpt_overlay(
+    gpt_1_5d, gpt_2_3w, final = chatgpt_overlay(
         asset=asset,
         signal_1_5d=signal_1_5d,
         signal_2_3w=signal_2_3w,
         macro=macro_bias
-)
-
-)
-
     )
 
+    return {
+        "decision": decision,
+        "gpt_1_5d": gpt_1_5d,
+        "gpt_2_3w": gpt_2_3w,
+        "final": final
+    }

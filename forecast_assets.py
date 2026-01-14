@@ -1,13 +1,38 @@
 import yfinance as yf
+
 from model_core import model_score
 from forecast_utils import forecast_trend
 from decision_engine import decide
 
-def forecast_asset(asset, df, macro_bias):
-    close = round(float(df["Close"].iloc[-1]), 1)
-    score = get_score(df)
-    signal, f_1_5, f_2_3 = get_signal(df)
 
+# --------------------------------------------------
+# ASSET DEFINITIONS (fix & explizit)
+# --------------------------------------------------
+
+ASSETS = [
+    ("GOLD", "GC=F", "STRONG_SUPPORT"),
+    ("SILVER", "SI=F", "NO_SUPPORT"),
+    ("NATURAL GAS", "NG=F", "STRONG_SUPPORT"),
+    ("COPPER", "HG=F", "STRONG_SUPPORT"),
+]
+
+
+# --------------------------------------------------
+# SINGLE ASSET FORECAST
+# --------------------------------------------------
+
+def forecast_asset(asset, ticker, macro_bias):
+    df = yf.download(ticker, period="6mo", interval="1d", progress=False)
+
+    close = round(float(df["Close"].iloc[-1]), 1)
+
+    # Core model
+    score = model_score(df)
+
+    # Short-term trend model
+    signal, f_1_5, f_2_3 = forecast_trend(df)
+
+    # ChatGPT overlay / decision engine
     decision = decide(
         asset=asset,
         score=score,
@@ -28,10 +53,18 @@ def forecast_asset(asset, df, macro_bias):
         "gpt_2_3w": decision["gpt_2_3w"],
         "final": decision["final"],
     }
+
+
+# --------------------------------------------------
+# RUN ALL ASSETS
+# --------------------------------------------------
+
 def run_all():
     results = []
 
-    for asset, df, macro_bias in ASSETS:
-        results.append(forecast_asset(asset, df, macro_bias))
+    for asset, ticker, macro_bias in ASSETS:
+        results.append(
+            forecast_asset(asset, ticker, macro_bias)
+        )
 
     return results

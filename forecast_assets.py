@@ -6,7 +6,7 @@ from decision_engine import decide
 
 
 # --------------------------------------------------
-# ASSET DEFINITIONS (fix & explizit)
+# ASSET DEFINITIONS
 # --------------------------------------------------
 
 ASSETS = [
@@ -24,8 +24,11 @@ ASSETS = [
 def forecast_asset(asset, ticker, macro_bias):
     df = yf.download(ticker, period="6mo", interval="1d", progress=False)
 
+    if df.empty or len(df) < 30:
+        raise ValueError(f"Not enough data for {asset}")
+
     # Last close
-    close = round(float(df["Close"].iloc[-1]), 1)
+    close = round(df["Close"].iloc[-1].item(), 1)
 
     # Core model score
     score = model_score(df)
@@ -34,19 +37,10 @@ def forecast_asset(asset, ticker, macro_bias):
     f_1_5 = forecast_trend(df, days=5)
     f_2_3 = forecast_trend(df, days=15)
 
-    # Aggregate main signal
-    if f_1_5 == "++" and f_2_3 == "++":
-        signal = "LONG"
-    elif f_1_5 == "--" and f_2_3 == "--":
-        signal = "SHORT"
-    else:
-        signal = "NO_TRADE"
-
     # ChatGPT overlay / decision engine
     decision = decide(
         asset=asset,
         score=score,
-        signal=signal,
         signal_1_5d=f_1_5,
         signal_2_3w=f_2_3,
         macro_bias=macro_bias
@@ -56,7 +50,7 @@ def forecast_asset(asset, ticker, macro_bias):
         "asset": asset,
         "close": close,
         "score": score,
-        "signal": signal,
+        "signal": decision["final"],   # FINAL ist dein echtes Handelssignal
         "f_1_5": f_1_5,
         "f_2_3": f_2_3,
         "gpt_1_5d": decision["gpt_1_5d"],

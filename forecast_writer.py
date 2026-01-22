@@ -17,7 +17,7 @@ def write_daily_summary(results):
         for r in results:
             f.write(
                 f"{r['asset']:<13}"
-                f"{r['close']:>4.1f}    "
+                f"{r['close']:>9.1f}    "
                 f"{r['score']:>5.3f}   "
                 f"{r['signal']:<11}"
                 f"{r['f_1_5']:<9}"

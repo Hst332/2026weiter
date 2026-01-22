@@ -88,10 +88,11 @@ def backtest(df, threshold):
     for _, row in df.iterrows():
         val = row["prob_up"]
         prob = float(val.iloc[0] if hasattr(val, "iloc") else val)
-        target = int(row["Target"])
+
+        val_t = row["Target"]
+        target = int(val_t.iloc[0] if hasattr(val_t, "iloc") else val_t)
 
         if prob >= threshold:
-            # LONG trade
             ret = 1 if target == 1 else -1
             trades.append(ret)
 
@@ -111,6 +112,7 @@ def backtest(df, threshold):
         "accuracy": trades[trades > 0].size / trades.size,
         "profit": int(trades.sum())
     }
+
 
 # =======================
 # MAIN

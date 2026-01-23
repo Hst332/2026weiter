@@ -58,6 +58,10 @@ def forecast_asset(asset, ticker, macro_bias):
         "final": decision["final"],
     }
 
+print(
+    f"{asset:<10} | SCORE={score:.3f} | "
+    f"1-5D={signal_1_5d:+.3f} | 2-3W={signal_2_3w:+.3f}"
+)
 
 # --------------------------------------------------
 # RUN ALL ASSETS

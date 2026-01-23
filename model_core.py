@@ -31,5 +31,7 @@ def compute_score(prices: np.ndarray) -> float:
 
     score = 0.5 + core * 0.25
     return round(float(score), 3)
-    # backward compatibility
-    model_score = compute_score
+
+
+# ✅ BACKWARD COMPATIBILITY (MODULE LEVEL!)
+model_score = compute_score

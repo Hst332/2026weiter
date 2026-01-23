@@ -1,19 +1,33 @@
 import numpy as np
-import pandas as pd
 
+def compute_score(prices: np.ndarray) -> float:
+    """
+    SCORE V2 – no saturation, volatility normalized
+    prices: np.array of daily closes (newest last)
+    """
 
-def model_score(df) -> float:
-    close = df["Close"]
+    if len(prices) < 30:
+        return 0.50
 
-    # Robust gegen Series ODER DataFrame
-    if isinstance(close, pd.DataFrame):
-        last = float(close.iloc[-1, 0])
-        past = float(close.iloc[-21, 0])
-    else:
-        last = float(close.iloc[-1])
-        past = float(close.iloc[-21])
+    p = prices.astype(float)
 
-    r = (last - past) / past
+    # returns
+    r_20 = (p[-1] - p[-21]) / p[-21]
+    r_5  = (p[-1] - p[-6])  / p[-6]
 
-    raw = 0.5 + np.clip(r * 3.0, -0.2, 0.2)
-    return round(float(np.clip(raw, 0.30, 0.70)), 3)
+    # volatility (log-returns)
+    rets = np.diff(np.log(p[-21:]))
+    vol  = np.std(rets) + 1e-6
+
+    # normalized momentum
+    m20 = r_20 / (vol * np.sqrt(20))
+    m5  = r_5  / (vol * np.sqrt(5))
+
+    # soft squash (NO HARD CAPS)
+    core = (
+        0.65 * np.tanh(m20 * 0.8) +
+        0.35 * np.tanh(m5  * 1.2)
+    )
+
+    score = 0.5 + core * 0.25
+    return round(float(score), 3)

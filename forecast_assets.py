@@ -49,15 +49,16 @@ def forecast_asset(asset, ticker, macro_bias):
     )
 
     return {
-        "asset": asset,
-        "close": close,
-        "score": score,
-        "signal": decision["final"],
-        "f_1_5": f_1_5,
-        "f_2_3": f_2_3,
-        "gpt_1_5d": decision["gpt_1_5d"],
-        "gpt_2_3w": decision["gpt_2_3w"],
-        "final": decision["final"],
+    "asset": asset,
+    "close": close,
+    "score": score,
+    "signal": decision["signal"],      # TRADE / NO_TRADE
+    "f_1_5": f_1_5,
+    "f_2_3": f_2_3,
+    "gpt_1_5d": decision["gpt_1_5d"],
+    "gpt_2_3w": decision["gpt_2_3w"],
+    "final": decision["final"],        # LONG / SHORT / NO_TRADE
+    "zusatzinfo": decision["zusatzinfo"]
     }
 
 

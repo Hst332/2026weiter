@@ -47,7 +47,7 @@ def write_daily_summary(results):
 
             "SILVER\n"
             "- Direction: LONG only\n"
-            "- Entry: prob_up >= 0.96\n"
+            "- Entry: prob_up >= 0.69\n"
             "- Trades/year: ~12\n"
             "- Leverage: max 15\n"
             "- Stop-loss: hard -20 %\n"

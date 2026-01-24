@@ -1,12 +1,30 @@
-import pandas as pd
+import yfinance as yf
 import numpy as np
-import metals_bundle
+import pandas as pd
 
-def main():
-    df = metals_bundle.load_silver()
+from model_core import model_score
 
-    # Backtest-Logik hier
-    print("[OK] Silver backtest runs independently")
+print("[START] Silver backtest")
 
-if __name__ == "__main__":
-    main()
+df = yf.download("SI=F", period="10y", interval="1d", progress=False)
+df = df.dropna()
+
+scores = []
+future_returns = []
+
+HOLD_DAYS = 10   # Silver etwas länger halten
+
+for i in range(30, len(df) - HOLD_DAYS):
+    window = df.iloc[:i]
+    score = model_score(window)
+
+    future_ret = (
+        df["Close"].iloc[i + HOLD_DAYS]
+        - df["Close"].iloc[i]
+    ) / df["Close"].iloc[i]
+
+    scores.append(score)
+    future_returns.append(future_ret)
+
+scores = np.array(scores)
+future_returns = np.array(future_returns)

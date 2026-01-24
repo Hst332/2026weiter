@@ -57,9 +57,10 @@ def decide(asset, score, signal_1_5d, signal_2_3w, macro_bias):
             ZUSATZINFO = "Gas Neutralzone"
 
     return {
-        "signal": SIGNAL,
-        "final": FINAL,
-        "gpt_1_5d": gpt_1_5d,
-        "gpt_2_3w": gpt_2_3w,
-        "zusatzinfo": ZUSATZINFO
-    }
+    "rule_signal": SIGNAL,     # TRADE / NO_TRADE
+    "action": FINAL,           # LONG / SHORT / NO_TRADE
+    "gpt_1_5d": gpt_1_5d,
+    "gpt_2_3w": gpt_2_3w,
+    "zusatzinfo": ZUSATZINFO
+}
+

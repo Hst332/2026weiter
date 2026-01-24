@@ -1,49 +1,65 @@
-import numpy as np
-# decision_engine.py
-
 def decide(asset, score, signal_1_5d, signal_2_3w, macro_bias):
-    """
-    Lightweight rule-based ChatGPT replacement
-    (deterministic & backtest-stable)
-    """
-    if signal_1_5d == "++":
-        gpt_1_5d = "Bullish"
-    elif signal_1_5d == "--":
-        gpt_1_5d = "Bearish"
-    else:
-        gpt_1_5d = "Neutral"
 
-    if signal_2_3w == "++":
-        gpt_2_3w = "Bullish"
-    elif signal_2_3w == "--":
-        gpt_2_3w = "Bearish"
-    else:
-        gpt_2_3w = "Neutral"
+    # Text-Einordnung (nur Info)
+    gpt_1_5d = "Bullish" if signal_1_5d == "++" else "Bearish" if signal_1_5d == "--" else "Neutral"
+    gpt_2_3w = "Bullish" if signal_2_3w == "++" else "Bearish" if signal_2_3w == "--" else "Neutral"
 
-    # FINAL decision logic (asset-agnostic baseline)
-    if (
-        score >= 0.55
-        and signal_1_5d == "++"
-        and signal_2_3w == "++"
-    ):
-        final = "LONG"
+    SIGNAL = "NO_TRADE"
+    FINAL = "NO_TRADE"
+    ZUSATZINFO = ""
 
-    elif (
-        score <= 0.45
-        and signal_1_5d == "--"
-        and signal_2_3w == "--"
-    ):
-        final = "SHORT"
+    # -----------------------------
+    # GOLD
+    # -----------------------------
+    if asset == "GOLD":
+        if score >= 0.53:
+            SIGNAL = "TRADE"
+            FINAL = "LONG"
+            ZUSATZINFO = "Gold-Regel aktiv"
+        else:
+            ZUSATZINFO = "Score unter Gold-Entry"
 
-    else:
-        final = "NO_TRADE"
-    print(
-    f"DECISION | score={score:.3f} | "
-    f"1-5D={signal_1_5d:+.3f} | 2-3W={signal_2_3w:+.3f} | final={final}"
-    )
+    # -----------------------------
+    # SILVER
+    # -----------------------------
+    elif asset == "SILVER":
+        if score >= 0.69:
+            SIGNAL = "TRADE"
+            FINAL = "LONG"
+            ZUSATZINFO = "Silver-Regel aktiv"
+        else:
+            ZUSATZINFO = "Score unter Silver-Entry"
+
+    # -----------------------------
+    # COPPER
+    # -----------------------------
+    elif asset == "COPPER":
+        if score >= 0.56:
+            SIGNAL = "TRADE"
+            FINAL = "LONG"
+            ZUSATZINFO = "Copper-Regel aktiv"
+        else:
+            ZUSATZINFO = "Score unter Copper-Entry"
+
+    # -----------------------------
+    # NATURAL GAS
+    # -----------------------------
+    elif asset == "NATURAL GAS":
+        if score >= 0.56:
+            SIGNAL = "TRADE"
+            FINAL = "LONG"
+            ZUSATZINFO = "Gas LONG-Regel"
+        elif score <= 0.44:
+            SIGNAL = "TRADE"
+            FINAL = "SHORT"
+            ZUSATZINFO = "Gas SHORT-Regel"
+        else:
+            ZUSATZINFO = "Gas Neutralzone"
 
     return {
+        "signal": SIGNAL,
+        "final": FINAL,
         "gpt_1_5d": gpt_1_5d,
         "gpt_2_3w": gpt_2_3w,
-        "final": final
+        "zusatzinfo": ZUSATZINFO
     }

@@ -42,10 +42,19 @@ if len(df) < 500:
 scores = []
 future_returns = []
 
-for i in range(MIN_BARS, len(df) - HOLD_DAYS):
-    window = df.iloc[:i]
+LOOKBACK = 40  # reicht für Score-V2
 
+for i in range(LOOKBACK, len(df) - HOLD_DAYS):
+    window = df.iloc[i - LOOKBACK:i]
     score = model_score(window)
+
+    entry = df["Close"].iloc[i]
+    exit_ = df["Close"].iloc[i + HOLD_DAYS]
+
+    ret = (exit_ - entry) / entry
+
+    scores.append(score)
+    future_returns.append(ret)
 
     entry = df["Close"].iloc[i]
     exit_ = df["Close"].iloc[i + HOLD_DAYS]

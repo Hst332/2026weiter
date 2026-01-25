@@ -9,23 +9,26 @@ def write_daily_summary(results):
         f.write(f"Run time (UTC): {datetime.utcnow():%Y-%m-%d %H:%M:%S}\n")
         f.write("=" * 110 + "\n")
         f.write(
-            "ASSET         CLOSE     SCORE   SIGNAL       1-5D      2-3W   "
-            "   GPT 1-5D   GPT 2-3W   FINAL\n"
+        "ASSET         CLOSE     SCORE   SIGNAL       1-5D      2-3W      "
+        "GPT 1-5D   GPT 2-3W   FINAL      ZUSATZINFO\n"
         )
         f.write("-" * 110 + "\n")
 
         for r in results:
             f.write(
-                f"{r['asset']:<13}"
-                f"{r['close']:>9.1f}    "
-                f"{r['score']:>5.3f}   "
-                f"{r['signal']:<11}"
-                f"{r['f_1_5']:<9}"
-                f"{r['f_2_3']:<9}"
-                f"{r.get('gpt_1_5d', 'NA'):<10}"
-                f"{r.get('gpt_2_3w', 'NA'):<11}"
-                f"{r.get('final', 'NoTrade')}\n"
+            f"{r['asset']:<13}"
+            f"{r['close']:>9.1f}    "
+            f"{r['score']:>5.3f}   "
+            f"{r['signal']:<11}"
+            f"{r['f_1_5']:<9}"
+            f"{r['f_2_3']:<9}"
+            f"{r.get('gpt_1_5d', 'NA'):<10}"
+            f"{r.get('gpt_2_3w', 'NA'):<11}"
+            f"{r.get('final', 'NO_TRADE'):<10}"
+            f"{r.get('zusatzinfo', '')}\n"
             )
+
+
 
         f.write("=" * 110 + "\n\n")
 

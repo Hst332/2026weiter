@@ -1,77 +1,51 @@
-import os
-from datetime import datetime
+from datetime import datetime, timezone
+import json
+from pathlib import Path
 
-OUTPUT_FILE = os.path.join(os.path.dirname(__file__), "forecast_output.txt")
+def write_forecasts(forecasts):
+    now = datetime.now(timezone.utc)
+    timestamp = now.strftime("%Y-%m-%d %H:%M UTC")
 
+    # Root-Verzeichnis
+    root = Path(".")
+    txt_file = root / "index_forecast.txt"
 
-def write_daily_summary(results):
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-        f.write(f"Run time (UTC): {datetime.utcnow():%Y-%m-%d %H:%M:%S}\n")
-        f.write("=" * 110 + "\n")
-        f.write(
-        "ASSET         CLOSE     SCORE   SIGNAL       1-5D      2-3W      "
-        "GPT 1-5D   GPT 2-3W   FINAL      ZUSATZINFO\n"
-        )
-        f.write("-" * 110 + "\n")
+    forecasts_dir = root / "forecasts"
+    daily = forecasts_dir / "daily"
+    history = forecasts_dir / "history"
 
-        for r in results:
+    daily.mkdir(parents=True, exist_ok=True)
+    history.mkdir(parents=True, exist_ok=True)
+
+    # Daily JSON
+    with open(daily / f"{now.date().isoformat()}.json", "w") as f:
+        json.dump(forecasts, f, indent=2)
+
+    # History JSON
+    history_file = history / "all_forecasts.json"
+    history_data = []
+
+    if history_file.exists():
+        with open(history_file) as f:
+            history_data = json.load(f)
+
+    history_data.append({
+        "timestamp": timestamp,
+        "forecasts": forecasts
+    })
+
+    with open(history_file, "w") as f:
+        json.dump(history_data, f, indent=2)
+
+    # 🔥 EINZIGE TXT-DATEI (überschreiben!)
+    with open(txt_file, "w") as f:
+        f.write(f"Index Forecasts – {timestamp}\n")
+        f.write("=" * 45 + "\n\n")
+
+        for item in forecasts:
             f.write(
-            f"{r['asset']:<13}"
-            f"{r['close']:>9.1f}    "
-            f"{r['score']:>5.3f}   "
-            f"{r['signal']:<11}"
-            f"{r['f_1_5']:<9}"
-            f"{r['f_2_3']:<9}"
-            f"{r.get('gpt_1_5d', 'NA'):<10}"
-            f"{r.get('gpt_2_3w', 'NA'):<11}"
-            f"{r.get('final', 'NO_TRADE'):<10}"
-            f"{r.get('zusatzinfo', '')}\n"
+                f"{item['asset']}: "
+                f"{item['signal']} "
+                f"(Confidence: {item['confidence']:.2f}, "
+                f"Regime: {item['regime']})\n"
             )
-
-
-
-        f.write("=" * 110 + "\n\n")
-
-        # -------------------------------------------------
-        # TRADING RULES (STATIC TEXT BLOCK)
-        # -------------------------------------------------
-        f.write("TRADING RULES (FINAL – BACKTEST VALIDATED)\n\n")
-
-        f.write(
-            "GOLD\n"
-            "- Direction: LONG only\n"
-            "- Entry: prob_up >= 0.53\n"
-            "- Position sizing:\n"
-            "    0.53 - 0.55 -> 50 %\n"
-            "    >= 0.55     -> 100 %\n"
-            "- Holding period: 5-20 trading days\n"
-            "- Leverage: max 3-5\n"
-            "- No short positions\n\n"
-
-            "SILVER\n"
-            "- Direction: LONG only\n"
-            "- Entry: prob_up >= 0.69\n"
-            "- Trades/year: ~12\n"
-            "- Leverage: max 15\n"
-            "- Stop-loss: hard -20 %\n"
-            "- Ignore all signals below threshold\n\n"
-
-            "COPPER\n"
-            "- Direction: LONG only\n"
-            "- Entry: prob_up >= 0.56\n"
-            "- Trades/year: ~60-150\n"
-            "- Leverage: max 5-10\n"
-            "- Stop-loss: hard -20 %\n"
-            "- No shorts\n\n"
-
-            "NATURAL GAS\n"
-            "- Direction: LONG & SHORT\n"
-            "- LONG  if prob_up >= 0.56\n"
-            "- SHORT if prob_up <= 0.44\n"
-            "- Otherwise: NO TRADE\n"
-            "- Leverage: max 10\n"
-            "- Stop-loss: hard -20 %\n\n"
-
-            "NOT TRADED\n"
-            "- Crude Oil (too impulsive / unstable regimes)\n"
-        )

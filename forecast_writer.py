@@ -4,7 +4,7 @@ from datetime import datetime
 OUTPUT_FILE = os.path.join(os.path.dirname(__file__), "forecast_output.txt")
 
 
-def write_daily_summary(results):
+def write_daily_summary(results, stats=None):
 
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
 
@@ -40,12 +40,36 @@ def write_daily_summary(results):
                 f"{final:<14}   "
                 f"{str(data_ok):<6}  "
                 f"{r.get('last_bar_utc_display','NA'):<16}  "
-                f"{r.get('age_s',0):>5}  "
-                f"{r.get('age_h',0):>5}  "
-                f"{r.get('rows',0):>4}  "
-                f"{r.get('nan_last',0):>8}  "
-                f"{r.get('stale',0):>5}  "
+                f"{int(r.get('age_s',0)):>5}  "
+                f"{float(r.get('age_h',0)):>5.2f}  "
+                f"{int(r.get('rows',0)):>4}  "
+                f"{int(r.get('nan_last',0)):>8}  "
+                f"{int(r.get('stale',0)):>5}  "
                 f"{r.get('zusatzinfo','')}\n"
             )
 
-        f.write("=" * 170 + "\n")
+        f.write("=" * 170 + "\n\n")
+
+        # ==========================================================
+        # PERFORMANCE / ACCURACY SECTION
+        # ==========================================================
+        if stats:
+            overall = stats.get("overall", {})
+            by_asset = stats.get("by_asset", {})
+
+            f.write("SIGNAL ACCURACY (EVALUATED TRADES) – Horizon: 5 Trading Days\n")
+            f.write("-" * 80 + "\n")
+            f.write(
+                f"OVERALL: Trades={overall.get('trades',0)} | "
+                f"Correct={overall.get('correct',0)} | Wrong={overall.get('wrong',0)} | "
+                f"Accuracy={overall.get('accuracy',None)}\n"
+            )
+            f.write("\nBY ASSET:\n")
+            for a, s in by_asset.items():
+                f.write(
+                    f"- {a}: Trades={s.get('trades',0)} | Correct={s.get('correct',0)} | "
+                    f"Wrong={s.get('wrong',0)} | Accuracy={s.get('accuracy',None)}\n"
+                )
+            f.write("\n")
+
+        # (dein RULE-BLOCK kann danach bleiben, wenn du ihn weiter drin haben willst)

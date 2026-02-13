@@ -1,52 +1,9 @@
-Run time (UTC): 2026-02-13 19:52:19
+Run time (UTC): 2026-02-13 20:37:09
 ==========================================================================================================================================================================
 ASSET         CLOSE     SCORE   SIGNAL       1-5D      2-3W      GPT 1-5D   GPT 2-3W   FINAL           DATA_OK  LAST_BAR_UTC        AGE_s  AGE_h  ROWS  NAN_LAST  STALE  ZUSATZINFO
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-GOLD              NA    0.000   NO_TRADE   0.0      0.0      NA        NA         NO_TRADE(DATA)   False   NA                1000000000  277777.78     0         1      1  ERROR: AttributeError: 'GuardResult' object has no attribute 'last_bar_utc'
-             >>> BLOCKED: ERROR: AttributeError
-SILVER            NA    0.000   NO_TRADE   0.0      0.0      NA        NA         NO_TRADE(DATA)   False   NA                1000000000  277777.78     0         1      1  ERROR: AttributeError: 'GuardResult' object has no attribute 'last_bar_utc'
-             >>> BLOCKED: ERROR: AttributeError
-NATURAL GAS       NA    0.000   NO_TRADE   0.0      0.0      NA        NA         NO_TRADE(DATA)   False   NA                1000000000  277777.78     0         1      1  ERROR: AttributeError: 'GuardResult' object has no attribute 'last_bar_utc'
-             >>> BLOCKED: ERROR: AttributeError
-COPPER            NA    0.000   NO_TRADE   0.0      0.0      NA        NA         NO_TRADE(DATA)   False   NA                1000000000  277777.78     0         1      1  ERROR: AttributeError: 'GuardResult' object has no attribute 'last_bar_utc'
-             >>> BLOCKED: ERROR: AttributeError
+GOLD          5052.8    0.599   TRADE      0.0004   -0.0053  Neutral   Neutral    LONG             True    2026-02-13        74228  20.62   128         0      0  Gold-Regel aktiv
+SILVER          77.3    0.460   NO_TRADE   -0.0584  -0.3286  Neutral   Neutral    NO_TRADE         True    2026-02-13        74228  20.62   128         0      0  Score unter Silver-Entry
+NATURAL GAS      3.2    0.491   NO_TRADE   0.0284   -0.5254  Neutral   Neutral    NO_TRADE         True    2026-02-13        74229  20.62   128         0      0  Gas Neutralzone
+COPPER           5.8    0.441   NO_TRADE   -0.0277  -0.034   Neutral   Neutral    NO_TRADE         True    2026-02-13        74229  20.62   128         0      0  Score unter Copper-Entry
 ==========================================================================================================================================================================
-
-TRADING RULES (FINAL – BACKTEST VALIDATED)
-
-GOLD
-- Direction: LONG only
-- Entry: prob_up >= 0.53
-- Position sizing:
-    0.53 - 0.55 -> 50 %
-    >= 0.55     -> 100 %
-- Holding period: 5-20 trading days
-- Leverage: max 3-5
-- No short positions
-
-SILVER
-- Direction: LONG only
-- Entry: prob_up >= 0.69
-- Trades/year: ~12
-- Leverage: max 15
-- Stop-loss: hard -20 %
-- Ignore all signals below threshold
-
-COPPER
-- Direction: LONG only
-- Entry: prob_up >= 0.56
-- Trades/year: ~60-150
-- Leverage: max 5-10
-- Stop-loss: hard -20 %
-- No shorts
-
-NATURAL GAS
-- Direction: LONG & SHORT
-- LONG  if prob_up >= 0.56
-- SHORT if prob_up <= 0.44
-- Otherwise: NO TRADE
-- Leverage: max 10
-- Stop-loss: hard -20 %
-
-NOT TRADED
-- Crude Oil (too impulsive / unstable regimes)

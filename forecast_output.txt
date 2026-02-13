@@ -1,11 +1,11 @@
-Run time (UTC): 2026-02-13 19:37:08
+Run time (UTC): 2026-02-13 19:41:36
 ================================================================================================================================================================
-ASSET         CLOSE     SCORE   SIGNAL       1-5D      2-3W      GPT 1-5D   GPT 2-3W   FINAL           DATA_OK  LAST_BAR_UTC         AGE_s  ROWS  NAN_LAST  STALE  ZUSATZINFO
+ASSET         CLOSE     SCORE   SIGNAL       1-5D      2-3W      GPT 1-5D   GPT 2-3W   FINAL  DATA_OK  LAST_BAR_UTC  AGE_s  ROWS  NAN_LAST  STALE  ZUSATZINFO
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
-GOLD          5065.0    0.603   TRADE      0.0028   -0.0029  Neutral   Neutral    LONG             True    2026-02-13 00:00:00  70628   128         0      0  Gold-Regel aktiv
-SILVER          78.2    0.468   NO_TRADE   -0.0473  -0.3206  Neutral   Neutral    NO_TRADE         True    2026-02-13 00:00:00  70628   128         0      0  Score unter Silver-Entry
-NATURAL GAS      3.3    0.494   NO_TRADE   0.0366   -0.5216  Neutral   Neutral    NO_TRADE         True    2026-02-13 00:00:00  70628   128         0      0  Gas Neutralzone
-COPPER           5.8    0.456   NO_TRADE   -0.0227  -0.0291  Neutral   Neutral    NO_TRADE         True    2026-02-13 00:00:00  70628   128         0      0  Score unter Copper-Entry
+GOLD          5064.5    0.603   TRADE      0.0027   -0.003   Neutral   Neutral    LONG             True    2026-02-13 00:00:00  70895   128         0      0  Gold-Regel aktiv
+SILVER          77.9    0.465   NO_TRADE   -0.0506  -0.3229  Neutral   Neutral    NO_TRADE         True    2026-02-13 00:00:00  70895   128         0      0  Score unter Silver-Entry
+NATURAL GAS      3.2    0.493   NO_TRADE   0.0338   -0.5229  Neutral   Neutral    NO_TRADE         True    2026-02-13 00:00:00  70896   128         0      0  Gas Neutralzone
+COPPER           5.8    0.452   NO_TRADE   -0.0238  -0.0302  Neutral   Neutral    NO_TRADE         True    2026-02-13 00:00:00  70896   128         0      0  Score unter Copper-Entry
 ================================================================================================================================================================
 
 TRADING RULES (FINAL – BACKTEST VALIDATED)

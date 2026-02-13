@@ -10,8 +10,8 @@ def write_daily_summary(results):
         f.write("=" * 160 + "\n")
         f.write(
             "ASSET         CLOSE     SCORE   SIGNAL       1-5D      2-3W      "
-            "GPT 1-5D   GPT 2-3W   FINAL           "
-            "DATA_OK  LAST_BAR_UTC         AGE_s  ROWS  NAN_LAST  STALE  ZUSATZINFO\n"
+            "GPT 1-5D   GPT 2-3W   FINAL  "
+            "DATA_OK  LAST_BAR_UTC  AGE_s  ROWS  NAN_LAST  STALE  ZUSATZINFO\n"
         )
         f.write("-" * 160 + "\n")
 
